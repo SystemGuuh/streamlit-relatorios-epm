@@ -34,13 +34,11 @@ def search_establishment_id(filter):
     result = getDfFromQuery("QUERY"+filter)
     return result.loc[0, 'ID']
 
-
 def operational_old_show_history(id):
-    df =getDfFromQuery(f"""
-    # CENTRAL DO ARTISTA:HISTÓRICO DE SHOWS (PASSADO)
-    SET SESSION TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+    query = (f"""
     SELECT
     P.ID AS ID_PROPOSTA,
+    A.FK_USUARIO,
 
         CASE 
             WHEN S.DESCRICAO IS NULL THEN "Cancelada"
@@ -60,13 +58,11 @@ def operational_old_show_history(id):
     P.ADIANTAMENTO,
     P.VALOR_ARTISTA_A_RECEBER,
     P.PREVISAO_PGTO,
-    P.PREVISAO_PGTO_ATUALIZADA,
     P.VALOR_ESHOWS_RECEBIMENTO,
     P.DATA_PAGAMENTO,
     P.PREVISAO_VENCIMENTO_BOLETO,
     C.NOTA_FISCAL AS EXIGE_NF,
     P.FK_NOTA_FISCAL AS ID_NF,
-    AB.NOME_TITULAR,
 
     CASE 
         WHEN P.FK_STATUS_PROPOSTA = 102 THEN CONCAT(MR.MOTIVO,": ",MRP.DESCRICAO_RECUSA)
@@ -90,10 +86,10 @@ def operational_old_show_history(id):
     LEFT JOIN T_GRUPOS_DE_CLIENTES GC ON GC.ID = C.FK_GRUPO
     LEFT JOIN T_MOTIVO_RECUSA_PROPOSTA MRP ON MRP.FK_PROPOSTA = P.ID
     LEFT JOIN T_MOTIVO_RECUSA MR ON MR.ID = MRP.FK_MOTIVO_RECUSA
-        LEFT JOIN T_MOTIVO_CANCELAMENTO_PROPOSTA MCP ON MCP.FK_PROPOSTA = P.ID
-        LEFT JOIN T_MOTIVO_CANCELAMENTO MC ON MC.ID = MCP.FK_ID_SOLICITACAO_CANCELAMENTO
+    LEFT JOIN T_MOTIVO_CANCELAMENTO_PROPOSTA MCP ON MCP.FK_PROPOSTA = P.ID
+    LEFT JOIN T_MOTIVO_CANCELAMENTO MC ON MC.ID = MCP.FK_ID_SOLICITACAO_CANCELAMENTO
     LEFT JOIN T_SINAL_PROBLEMA_PROPOSTA SPP ON SPP.FK_PROPOSTA = P.ID
-        LEFT JOIN T_SINAL_PROBLEMA SP ON SP.ID = SPP.FK_SINAL_PROBLEMA
+    LEFT JOIN T_SINAL_PROBLEMA SP ON SP.ID = SPP.FK_SINAL_PROBLEMA
     LEFT JOIN ADMIN_USERS AU ON AU.ID = A.FK_USUARIO
     LEFT JOIN T_ATRACAO_BANCOS AB ON (AB.ID = P.FK_ATRACAO_BANCO)
 
@@ -104,21 +100,18 @@ def operational_old_show_history(id):
         AND P.DATA_INICIO IS NOT NULL
         AND DATE(P.DATA_INICIO) <= CURDATE()
         AND P.DATA_INICIO > DATE_SUB(CURDATE(), INTERVAL 120 DAY)
-        AND A.FK_USUARIO = '36822'
+        AND AU.ID = {id}
 
     ORDER BY P.DATA_INICIO DESC;
     """)
-    return df
-
-
+    
+    return getDfFromQuery(query)
+     
 def operational_new_show_history(id):
-    result = getDfFromQuery(f"""
-    # CENTRAL DO ARTISTA:HISTÓRICO DE SHOWS (PASSADO)
-
-    SET SESSION TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
-
+    return getDfFromQuery(f"""
     SELECT
     P.ID AS ID_PROPOSTA,
+    A.FK_USUARIO,
 
         CASE 
             WHEN S.DESCRICAO IS NULL THEN "Cancelada"
@@ -178,17 +171,13 @@ def operational_new_show_history(id):
         AND P.DATA_INICIO IS NOT NULL
         AND DATE(P.DATA_INICIO) >= CURDATE()
         AND A.FK_USUARIO = {id}
+        
 
-    ORDER BY P.DATA_INICIO DESC;
+    ORDER BY P.DATA_INICIO DESC 
     """)
 
-@st.cache_data
 def operational_explore_stages(id):
     result = getDfFromQuery(f"""
-    #EXPLORAR PALCOS
-
-    SET SESSION TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
-
     SELECT
     CI.ID,
     CI.CREATED_AT,
@@ -228,13 +217,8 @@ def operational_explore_stages(id):
     """)
     return result
 
-@st.cache_data
 def operational_oportunities(id):
     result = getDfFromQuery(f"""
-    #OPORTUNIDADE
-
-    SET SESSION TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
-
     SELECT
     C.ID,
     CASE
@@ -280,12 +264,9 @@ def operational_oportunities(id):
 
     GROUP BY C.ID
     ORDER BY O.DATA_INICIO DESC
-
-
     """)
     return result
 
-@st.cache_data
 def operational_casting(id):
     result = getDfFromQuery(f"""
     SET SESSION TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
@@ -309,7 +290,6 @@ def operational_casting(id):
     """)
     return result
 
-@st.cache_data
 def operational_favorite(id):
     result = getDfFromQuery(f"""
     # CENTRAL_DO_ARTISTA:CASAS_COM_BLOQUEIO
@@ -397,7 +377,6 @@ def GET_ALL_REPORT_ARTIST_BY_OCCURRENCE_AND_DATE(id):
 
     return df
 
-# Financeiro
 @st.cache_data
 def GET_GERAL_INFORMATION_AND_FINANCES(id): 
     df =getDfFromQuery(f"""

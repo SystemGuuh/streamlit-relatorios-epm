@@ -64,14 +64,14 @@ def buildOperationalPerformace(oldShowHistory, newShowHistory, exploreStages, op
 class OperationalPerformacePage(Page):
     def render(self):
         buildOperationalPerformace(
-                                   self.data['oldShowHistory'].copy(),
-                                   self.data['newShowHistory'].copy(),
-                                   self.data['exploreStages'].copy(),
-                                   self.data['oportunites'].copy(),
-                                   self.data['casting'].copy(),
-                                   self.data['favorite'].copy(),
-                                   self.data['operationalPerformace'].copy(),  
-                                   self.data['ByOccurrence'].copy(), 
-                                   self.data['ByWeek'].copy(),  
-                                   self.data['allOperationalPerformaceByOccurrenceAndDate'].copy(), 
-                                   self.data['financeDash'].copy())
+                                   self.data['oldShowHistory'],
+                                   self.data['newShowHistory'],
+                                   self.data['exploreStages'],
+                                   self.data['oportunites'],
+                                   self.data['casting'],
+                                   self.data['favorite'],
+                                   self.data['operationalPerformace'],  
+                                   self.data['ByOccurrence'], 
+                                   self.data['ByWeek'],  
+                                   self.data['allOperationalPerformaceByOccurrenceAndDate'], 
+                                   self.data['financeDash'])

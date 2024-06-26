@@ -28,7 +28,7 @@ if 'loggedIn' not in st.session_state:
 if st.session_state['loggedIn']:
     #user_id = st.session_state['user_data']["data"]["user_id"]
     #user_name = st.session_state['user_data']["data"]['full_name']
-    user_id = 12345
+    user_id = 25666
     user_name = "Nome Usuário"
 
     if 'Search' not in st.session_state:
@@ -41,13 +41,20 @@ if st.session_state['loggedIn']:
             st.markdown("<p style='padding-top:0.4em'></p>", unsafe_allow_html=True)
             search_user = modalSearchComponent()
             
-            if not search_user.empty and st.session_state['Search']['id'] is None:
-                if search_user.shape[0] > 1:
-                    modalChooseResultComponent(search_user)
+            # lógica salvar o id do usuário buscado na sessão ou trocar caso feita outra busca
+            if not search_user.empty:
+                if st.session_state['Search']['id'] is None:
+                    if search_user.shape[0] > 1:
+                        modalChooseResultComponent(search_user)
+                    else:
+                        st.session_state['Search']['id'] = search_user['ID'].loc[0]
                 else:
-                    st.session_state['Search']['id'] = search_user['ID'].loc[0]
-            elif st.session_state['Search']['id'] is not None:
-                search_user = search_user_from_session(st.session_state['Search']['id'])
+                    search_user_old = search_user_from_session(st.session_state['Search']['id'])
+                    if set(search_user['ID']) != set(search_user_old['ID']):
+                        if search_user.shape[0] > 1:
+                            modalChooseResultComponent(search_user)
+                        else:
+                            st.session_state['Search']['id'] = search_user['ID'].loc[0]
                 
             
         with row1[1]:
@@ -70,14 +77,14 @@ if st.session_state['loggedIn']:
     # Body
     tab1, tab2, tab3 = st.tabs(["OPERACIONAL", "HISTÓRICO DE SHOWS", "FINANCEIRO"])
     with tab1:
-        #try:
+        try:
             if not search_user.empty:
                 search_user_id = search_user['ID'].loc[0]
-                data = get_data_operational_performace(data, search_user_id)
+                data = get_data_operational_performace(data, user_id, search_user_id)
                 page = OperationalPerformacePage(data)
                 page.render()
-        #except Exception as e:
-        #    st.error(f'Não foi possível carregar a página. Erro: {e}')
+        except Exception as e:
+            st.error(f'Não foi possível carregar a página. Erro: {e}')
     with tab2:
         try:
             data = get_data_Finances(data, user_id, inputDate, inputEstablishment)

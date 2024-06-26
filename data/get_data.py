@@ -83,30 +83,72 @@ def get_data_ShowStatement(data, id, inputDate=None, inputEstablishment=None):
     
     return data
 
-def get_data_operational_performace(data, id):
-    oldShowHistory = operational_old_show_history(id)
-    newShowHistory = operational_new_show_history(id)
-    exploreStages = operational_explore_stages(id)
-    oportunites = operational_oportunities(id)
-    casting = operational_casting(id)
-    favorite = operational_favorite(id)
-    financeDash = GET_GERAL_INFORMATION_AND_FINANCES(id)
-    ByOccurrence = get_report_by_occurrence(GET_ALL_REPORT_ARTIST_BY_OCCURRENCE_AND_DATE(id))
-    allOperationalPerformaceByOccurrenceAndDate = operational_performance(id)
-    operationalPerformace = get_report_artist(allOperationalPerformaceByOccurrenceAndDate)
-    ByWeek = get_report_artist_by_week(allOperationalPerformaceByOccurrenceAndDate)
-    
-    data['oldShowHistory'] = oldShowHistory
-    data['newShowHistory'] = newShowHistory
-    data['exploreStages'] = exploreStages
-    data['oportunites'] = oportunites
-    data['casting'] = casting
-    data['favorite'] = favorite
-    data['financeDash'] = financeDash
-    data['ByOccurrence'] = ByOccurrence
-    data['allOperationalPerformaceByOccurrenceAndDate'] = allOperationalPerformaceByOccurrenceAndDate
-    data['operationalPerformace'] = operationalPerformace
-    data['ByWeek'] = ByWeek
+def get_data_operational_performace(data, user_id,id):
+    try:
+        oldShowHistory = operational_old_show_history(id)
+        data['oldShowHistory'] = oldShowHistory
+    except Exception as e:
+        data['oldShowHistory'] = pd.DataFrame()
+
+    try:
+        newShowHistory = operational_new_show_history(id)
+        data['newShowHistory'] = newShowHistory
+    except Exception as e:
+        data['newShowHistory'] = pd.DataFrame()
+
+    try:
+        exploreStages = operational_explore_stages(id)
+        data['exploreStages'] = exploreStages
+    except Exception as e:
+        data['exploreStages'] = pd.DataFrame()
+
+    try:
+        oportunites = operational_oportunities(id)
+        data['oportunites'] = oportunites
+    except Exception as e:
+        data['oportunites'] = pd.DataFrame()
+
+    try:
+        casting = operational_casting(id)
+        data['casting'] = casting
+    except Exception as e:
+        data['casting'] = pd.DataFrame()
+
+    try:
+        favorite = operational_favorite(id)
+        data['favorite'] = favorite
+    except Exception as e:
+        data['favorite'] = pd.DataFrame()
+
+    try:
+        financeDash = GET_GERAL_INFORMATION_AND_FINANCES(user_id)
+        data['financeDash'] = financeDash
+    except Exception as e:
+        data['financeDash'] = pd.DataFrame()
+
+    try:
+        ByOccurrence = get_report_by_occurrence(GET_ALL_REPORT_ARTIST_BY_OCCURRENCE_AND_DATE(user_id))
+        data['ByOccurrence'] = ByOccurrence
+    except Exception as e:
+        data['ByOccurrence'] = pd.DataFrame()
+
+    try:
+        allOperationalPerformaceByOccurrenceAndDate = operational_performance(user_id)
+        data['allOperationalPerformaceByOccurrenceAndDate'] = allOperationalPerformaceByOccurrenceAndDate
+    except Exception as e:
+        data['allOperationalPerformaceByOccurrenceAndDate'] = pd.DataFrame()
+
+    try:
+        operationalPerformace = get_report_artist(allOperationalPerformaceByOccurrenceAndDate)
+        data['operationalPerformace'] = operationalPerformace
+    except Exception as e:
+        data['operationalPerformace'] = pd.DataFrame()
+
+    try:
+        ByWeek = get_report_artist_by_week(allOperationalPerformaceByOccurrenceAndDate)
+        data['ByWeek'] = ByWeek
+    except Exception as e:
+        data['ByWeek'] = pd.DataFrame()
     
     return data
 

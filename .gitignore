@@ -1,2 +1,6 @@
+# Ignore files
 venv/*
 .streamlit/
+
+# Except for the config.toml file
+!.streamlit/config.toml

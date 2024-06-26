@@ -1,0 +1,42 @@
+Central do artista no EPM
+uso interno para vermos informações de artistas 
+
+Busca:
+Email - admin user .login - junta na T_ATRACOES por FK_USUARIOS
+
+https://apps.eshows.com.br/eshows/Config/ApplicationsItems#
+-só @eshows no login
+-Histórico de Atendimento do Usuário (não colocar)
+
+Filtros de email, usuário, nome, celular, numero do projeto
+card no header com informações do usuário
+
+distribuição em menus:
+
+[Operacional]
+ Histórico de shows
+ -- futuro passado
+ Explorar palcos
+ Oportunidades
+ Artístico
+ -- Casting
+ -- Favorito
+ Ocorrências(Desempenho Operacional)
+ -- Filtra por artistas invés do estabelecimento
+
+
+[histórico de shows]
+histico de sows passados e futuros
+
+[Financeiro]
+fechamentos 
+Shows dentro do fechamento -> testar implemtenção com o expander
+Notas fiscais (avisar se não tiver)
+ -- Por fechamento
+ -- Por shows antecipados
+ -- Histórico de NF enviadas
+ ---- Shows dentro nota fiscal
+Boletos do artista(pagamentos do contratante)
+ -- Shoe dentro do boleto
+
+

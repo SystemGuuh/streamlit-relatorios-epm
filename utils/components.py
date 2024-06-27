@@ -167,8 +167,12 @@ def modalChooseResultComponent(result):
     st.write('Escolha um:')
     for index, row in result.iterrows():
         if st.button(f"ID: {row['ID']} | Nome: {row['NOME']}", key=index):
-            st.session_state['Search']['id'] = row['ID']
-            st.experimental_rerun()
+            st.session_state['Search']['ID'] = row['ID']
+            st.session_state['Search']['FULL_NAME'] = str(row['FULL_NAME'])
+            st.session_state['Search']['NOME'] = str(row['NOME'])
+            st.session_state['Search']['LOGIN'] = str(row['LOGIN'])
+            st.session_state['Search']['CELULAR'] = str(row['CELULAR'])
+            st.rerun()
 
 # Mostra os dados do artista buscado na nav
 def searchUserDataComponent(user):
@@ -185,7 +189,11 @@ def searchUserDataComponent(user):
             st.markdown(f"<p style='text-align: center; margin-top: 1vh;'>Celular: {str(user['CELULAR'].loc[0])}</p>", unsafe_allow_html=True)
         with row1[4]:
             if st.button('X'):
-                st.session_state['Search']['id'] = None
+                st.session_state['Search']['ID'] = None
+                st.session_state['Search']['FULL_NAME'] = None
+                st.session_state['Search']['NOME'] = None
+                st.session_state['Search']['LOGIN'] = None
+                st.session_state['Search']['CELULAR'] = None
                 st.rerun()
 
 def filterReportType(df):

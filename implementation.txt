@@ -39,4 +39,5 @@ Notas fiscais (avisar se não tiver)
 Boletos do artista(pagamentos do contratante)
  -- Shoe dentro do boleto
 
-
+Arrumar query de busca de usuário
+-- ver login 10156

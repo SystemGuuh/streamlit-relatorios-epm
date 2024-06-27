@@ -22,6 +22,12 @@ def buildOperationalPerformace(oldShowHistory, newShowHistory, exploreStages, op
         plotDataframe(favorite, "Casas em que o artista está favoritado")
         
     with tab[3]:
+        # filtrando pelo artista a partir do session_state
+        art = st.session_state['Search']['NOME']
+        operationalPerformace = operationalPerformace[operationalPerformace['ARTISTA']==art]
+        financeDash = financeDash[financeDash['ARTISTA']==art]
+        allOperationalPerformaceByOccurrenceAndDate = allOperationalPerformaceByOccurrenceAndDate[allOperationalPerformaceByOccurrenceAndDate['ARTISTA']==art]
+
         container1 = st.container(border=True)
         container2 = st.container(border=True)
         with container1: 
@@ -45,18 +51,13 @@ def buildOperationalPerformace(oldShowHistory, newShowHistory, exploreStages, op
         row1 = st.columns(6)
         with row1[0]:
             type = filterReportType(allOperationalPerformaceByOccurrenceAndDate)
-        with row1[1]:
-            art = filterReportArtist(allOperationalPerformaceByOccurrenceAndDate)
         with row1[5]:
-            st.write('') # alinhar botão
-            st.write('') # alinhar botão
+            st.markdown("<p style='padding-top:0.5em'></p>", unsafe_allow_html=True)
             buttonDowloadDash(allOperationalPerformaceByOccurrenceAndDate, "Extrato-de-Ocorrencias")
         container = st.container(border=True)
         with container:
             if type is not None:
                 allOperationalPerformaceByOccurrenceAndDate = allOperationalPerformaceByOccurrenceAndDate[allOperationalPerformaceByOccurrenceAndDate['TIPO']==type]
-            if art is not None:
-                allOperationalPerformaceByOccurrenceAndDate = allOperationalPerformaceByOccurrenceAndDate[allOperationalPerformaceByOccurrenceAndDate['ARTISTA']==art]
 
             plotDataframe(allOperationalPerformaceByOccurrenceAndDate, "Relatório completo de ocorrências")
     pass

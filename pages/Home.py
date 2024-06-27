@@ -32,7 +32,12 @@ if st.session_state['loggedIn']:
     user_name = "Nome Usuário"
 
     if 'Search' not in st.session_state:
-        st.session_state['Search'] = {'id': None}
+        st.session_state['Search'] = {'ID': None,
+        'FULL_NAME' : None,
+        'NOME' : None,
+        'LOGIN' : None,
+        'CELULAR' : None
+        }
 
     # Header
     with st.container(border=True):
@@ -43,20 +48,18 @@ if st.session_state['loggedIn']:
             
             # lógica salvar o id do usuário buscado na sessão ou trocar caso feita outra busca
             if not search_user.empty:
-                if st.session_state['Search']['id'] is None:
-                    if search_user.shape[0] > 1:
-                        modalChooseResultComponent(search_user)
-                    else:
-                        st.session_state['Search']['id'] = search_user['ID'].loc[0]
+                if search_user.shape[0] > 1:
+                    modalChooseResultComponent(search_user)
                 else:
-                    search_user_old = search_user_from_session(st.session_state['Search']['id'])
-                    if set(search_user['ID']) != set(search_user_old['ID']):
-                        if search_user.shape[0] > 1:
-                            modalChooseResultComponent(search_user)
-                        else:
-                            st.session_state['Search']['id'] = search_user['ID'].loc[0]
+                    st.write(search_user)
+                    st.session_state['Search']['ID'] = search_user['ID'].loc[0]
+                    st.session_state['Search']['FULL_NAME'] = str(search_user['FULL_NAME'].loc[0])
+                    st.session_state['Search']['NOME'] = str(search_user['NOME'].loc[0])
+                    st.session_state['Search']['LOGIN'] = str(search_user['LOGIN'].loc[0])
+                    st.session_state['Search']['CELULAR'] = str(search_user['CELULAR'].loc[0])
+            elif st.session_state['Search']['ID'] is not None and search_user.empty:
+                search_user = search_user_from_session(st.session_state['Search']['ID'])
                 
-            
         with row1[1]:
             st.markdown("<h2 style='text-align: center;'>Informações dos projetos</h2>", unsafe_allow_html=True)
         
@@ -70,21 +73,20 @@ if st.session_state['loggedIn']:
                 st.switch_page("main.py")
     
     # Nav
-    if not search_user.empty and st.session_state['Search']['id'] is not None:
-        searchUserDataComponent(search_user)
+    if not search_user.empty: searchUserDataComponent(search_user)
 
     data = initialize_data(user_id)
     # Body
     tab1, tab2, tab3 = st.tabs(["OPERACIONAL", "HISTÓRICO DE SHOWS", "FINANCEIRO"])
     with tab1:
-        try:
-            if not search_user.empty:
-                search_user_id = search_user['ID'].loc[0]
+        #try:
+            if st.session_state['Search']['ID'] is not None:
+                search_user_id = st.session_state['Search']['ID']
                 data = get_data_operational_performace(data, user_id, search_user_id)
                 page = OperationalPerformacePage(data)
                 page.render()
-        except Exception as e:
-            st.error(f'Não foi possível carregar a página. Erro: {e}')
+        #except Exception as e:
+        #    st.error(f'Não foi possível carregar a página. Erro: {e}')
     with tab2:
         try:
             data = get_data_Finances(data, user_id, inputDate, inputEstablishment)

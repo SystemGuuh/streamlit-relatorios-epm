@@ -2,6 +2,7 @@ from data.dbconnect import getDfFromQuery
 from data.functions import *
 import streamlit as st
 
+
 def search_artist_id(filter):
     result = getDfFromQuery("""
     SELECT 
@@ -30,10 +31,12 @@ def get_search_user_from_session(id):
     """)
     return result
 
+
 def search_establishment_id(filter):
     result = getDfFromQuery("QUERY"+filter)
     return result.loc[0, 'ID']
 
+@st.cache_data
 def operational_old_show_history(id):
     query = (f"""
     SELECT
@@ -106,7 +109,8 @@ def operational_old_show_history(id):
     """)
     
     return getDfFromQuery(query)
-     
+
+@st.cache_data     
 def operational_new_show_history(id):
     return getDfFromQuery(f"""
     SELECT
@@ -176,6 +180,7 @@ def operational_new_show_history(id):
     ORDER BY P.DATA_INICIO DESC 
     """)
 
+@st.cache_data
 def operational_explore_stages(id):
     result = getDfFromQuery(f"""
     SELECT
@@ -217,6 +222,7 @@ def operational_explore_stages(id):
     """)
     return result
 
+@st.cache_data
 def operational_oportunities(id):
     result = getDfFromQuery(f"""
     SELECT
@@ -267,10 +273,9 @@ def operational_oportunities(id):
     """)
     return result
 
+@st.cache_data
 def operational_casting(id):
     result = getDfFromQuery(f"""
-    SET SESSION TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
-
     SELECT
     C.NAME AS ESTABELECIMENTO,
     A.NOME AS ARTISTA,
@@ -284,12 +289,12 @@ def operational_casting(id):
     INNER JOIN ADMIN_USERS AU ON AU.ID = A.FK_USUARIO
     INNER JOIN T_COMPANIES C ON C.ID = CAST.FK_CONTRATANTE
 
-    WHERE
-    AND A.FK_USUARIO = {id}
+    WHERE A.FK_USUARIO = {id}
 
     """)
     return result
 
+@st.cache_data
 def operational_favorite(id):
     result = getDfFromQuery(f"""
     # CENTRAL_DO_ARTISTA:CASAS_COM_BLOQUEIO
@@ -336,9 +341,8 @@ def operational_performance(id):
                             LEFT JOIN T_COMPANIES C ON (C.ID = P.FK_CONTRANTE OR C.ID = F.FK_CONTRATANTE OR C.ID = P2.FK_CONTRANTE)
                             LEFT JOIN T_ESTILOS_MUSICAIS EM ON A.FK_ESTILO_PRINCIPAL = EM.ID
                             
-                            WHERE 
-                            C.ID IN (SELECT GU.FK_COMPANY FROM T_GRUPO_USUARIO GU WHERE GU.FK_USUARIO = {id} AND GU.STATUS = 1)
-                            AND C.ID NOT IN (102,343,632,633)
+                            WHERE
+                            C.ID NOT IN (102,343,632,633)
                             AND A.ID NOT IN (12166)
                             AND OA.DATA_OCORRENCIA >= '2024-06-06'
                     """)
@@ -346,7 +350,7 @@ def operational_performance(id):
     return df
 
 @st.cache_data
-def GET_ALL_REPORT_ARTIST_BY_OCCURRENCE_AND_DATE(id):
+def operational_report_by_occurence_and_date(id):
     df = getDfFromQuery(f"""
                             SELECT
                             A.NOME AS ARTISTA,
@@ -378,7 +382,7 @@ def GET_ALL_REPORT_ARTIST_BY_OCCURRENCE_AND_DATE(id):
     return df
 
 @st.cache_data
-def GET_GERAL_INFORMATION_AND_FINANCES(id): 
+def operational_general_information_and_finance(id): 
     df =getDfFromQuery(f"""
                         SELECT
                         S.DESCRICAO AS STATUS_PROPOSTA,

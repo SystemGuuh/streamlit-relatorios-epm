@@ -121,13 +121,13 @@ def get_data_operational_performace(data, user_id,id):
         data['favorite'] = pd.DataFrame()
 
     try:
-        financeDash = GET_GERAL_INFORMATION_AND_FINANCES(user_id)
+        financeDash = operational_general_information_and_finance(user_id)
         data['financeDash'] = financeDash
     except Exception as e:
         data['financeDash'] = pd.DataFrame()
 
     try:
-        ByOccurrence = get_report_by_occurrence(GET_ALL_REPORT_ARTIST_BY_OCCURRENCE_AND_DATE(user_id))
+        ByOccurrence = get_report_by_occurrence(operational_report_by_occurence_and_date(user_id))
         data['ByOccurrence'] = ByOccurrence
     except Exception as e:
         data['ByOccurrence'] = pd.DataFrame()

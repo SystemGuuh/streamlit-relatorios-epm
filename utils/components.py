@@ -177,17 +177,19 @@ def modalChooseResultComponent(result):
 # Mostra os dados do artista buscado na nav
 def searchUserDataComponent(user):
     with st.container(border=True):
-        row1 = st.columns([2.5,2.5,2.5,2.5, 0.5])
+        row1 = st.columns([1,2,2,2.5,2,0.5])
 
         with row1[0]:
-            st.markdown(f"<p style='text-align: center; margin-top: 1vh;'>Nome: {str(user['FULL_NAME'].loc[0])}</p>", unsafe_allow_html=True)
+            st.markdown(f"<p style='text-align: center; margin-top: 1vh;'>Id: {str(user['ID'].loc[0])}</p>", unsafe_allow_html=True)
         with row1[1]:
-            st.markdown(f"<p style='text-align: center; margin-top: 1vh;'>Projeto: {str(user['NOME'].loc[0])}</p>", unsafe_allow_html=True)
+            st.markdown(f"<p style='text-align: center; margin-top: 1vh;'>Nome: {str(user['FULL_NAME'].loc[0])}</p>", unsafe_allow_html=True)
         with row1[2]:
-            st.markdown(f"<p style='text-align: center; margin-top: 1vh;'>E-mail: {str(user['LOGIN'].loc[0])}</p>", unsafe_allow_html=True)
+            st.markdown(f"<p style='text-align: center; margin-top: 1vh;'>Projeto: {str(user['NOME'].loc[0])}</p>", unsafe_allow_html=True)
         with row1[3]:
-            st.markdown(f"<p style='text-align: center; margin-top: 1vh;'>Celular: {str(user['CELULAR'].loc[0])}</p>", unsafe_allow_html=True)
+            st.markdown(f"<p style='text-align: center; margin-top: 1vh;'>E-mail: {str(user['LOGIN'].loc[0])}</p>", unsafe_allow_html=True)
         with row1[4]:
+            st.markdown(f"<p style='text-align: center; margin-top: 1vh;'>Celular: {str(user['CELULAR'].loc[0])}</p>", unsafe_allow_html=True)
+        with row1[5]:
             if st.button('X'):
                 st.session_state['Search']['ID'] = None
                 st.session_state['Search']['FULL_NAME'] = None

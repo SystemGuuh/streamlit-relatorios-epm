@@ -322,6 +322,7 @@ def operational_favorite(id):
 def operational_performance(id):
     df = getDfFromQuery(f"""
                             SELECT
+                            A.FK_USUARIO AS ID,
                             A.NOME AS ARTISTA,
                             DATE(OA.DATA_OCORRENCIA) AS DATA,
                             DATE_ADD(DATE(OA.DATA_OCORRENCIA), INTERVAL(2-DAYOFWEEK(OA.DATA_OCORRENCIA)) DAY) AS SEMANA,
@@ -342,9 +343,10 @@ def operational_performance(id):
                             LEFT JOIN T_ESTILOS_MUSICAIS EM ON A.FK_ESTILO_PRINCIPAL = EM.ID
                             
                             WHERE
-                            C.ID NOT IN (102,343,632,633)
+                            A.FK_USUARIO = {id} 
+                            AND C.ID NOT IN (102,343,632,633)
                             AND A.ID NOT IN (12166)
-                            AND OA.DATA_OCORRENCIA >= '2024-06-06'
+                            AND OA.DATA_OCORRENCIA >= DATE_SUB(CURDATE(), INTERVAL 6 MONTH)
                     """)
 
     return df
@@ -353,13 +355,14 @@ def operational_performance(id):
 def operational_report_by_occurence_and_date(id):
     df = getDfFromQuery(f"""
                             SELECT
+                            A.FK_USUARIO AS ID,
                             A.NOME AS ARTISTA,
                             DATE(OA.DATA_OCORRENCIA) AS DATA,
                             DATE_ADD(DATE(OA.DATA_OCORRENCIA), INTERVAL(2-DAYOFWEEK(OA.DATA_OCORRENCIA)) DAY) AS SEMANA,
                             TIPO.TIPO AS TIPO,
                             EM.DESCRICAO AS ESTILO,
                             C.NAME AS ESTABELECIMENTO
-                            
+
                             FROM 
                             T_OCORRENCIAS_AUTOMATICAS OA
                             LEFT JOIN T_PROPOSTAS P ON P.ID = OA.TABLE_ID AND OA.TABLE_NAME = 'T_PROPOSTAS'
@@ -371,12 +374,11 @@ def operational_report_by_occurence_and_date(id):
                             LEFT JOIN T_PROPOSTAS P2 ON P2.ID = NF2.FK_PROPOSTA
                             LEFT JOIN T_COMPANIES C ON (C.ID = P.FK_CONTRANTE OR C.ID = F.FK_CONTRATANTE OR C.ID = P2.FK_CONTRANTE)
                             LEFT JOIN T_ESTILOS_MUSICAIS EM ON A.FK_ESTILO_PRINCIPAL = EM.ID
-                            
-                            WHERE 
-                            C.ID IN (SELECT GU.FK_COMPANY FROM T_GRUPO_USUARIO GU WHERE GU.FK_USUARIO = {id} AND GU.STATUS = 1)
+
+                            WHERE A.FK_USUARIO = {id} 
                             AND C.ID NOT IN (102,343,632,633)
                             AND A.ID NOT IN (12166)
-                            AND OA.DATA_OCORRENCIA >= '2024-06-06'
+                            AND OA.DATA_OCORRENCIA >= DATE_SUB(CURDATE(), INTERVAL 6 MONTH)
                     """)
 
     return df
@@ -385,10 +387,11 @@ def operational_report_by_occurence_and_date(id):
 def operational_general_information_and_finance(id): 
     df =getDfFromQuery(f"""
                         SELECT
+                        A.FK_USUARIO AS ID,
+                        A.NOME AS ARTISTA,
+                        C.NAME AS ESTABELECIMENTO,
                         S.DESCRICAO AS STATUS_PROPOSTA,
                         SF.DESCRICAO AS STATUS_FINANCEIRO,
-                        C.NAME AS ESTABELECIMENTO,
-                        A.NOME AS ARTISTA,
                         P.DATA_INICIO AS DATA_INICIO,
                         P.DATA_FIM AS DATA_FIM,
                         CONCAT(
@@ -402,22 +405,18 @@ def operational_general_information_and_finance(id):
                         F.ID AS ID_FECHAMENTO,
                         F.DATA_INICIO AS INICIO_FECHAMENTO,
                         F.DATA_FIM AS FIM_FECHAMENTO
-
                         FROM T_PROPOSTAS P
                         INNER JOIN T_COMPANIES C ON (P.FK_CONTRANTE = C.ID)
                         INNER JOIN T_ATRACOES A ON (P.FK_CONTRATADO = A.ID)
                         LEFT JOIN T_PROPOSTA_STATUS S ON (P.FK_STATUS_PROPOSTA = S.ID)
-                        INNER JOIN T_GRUPO_USUARIO GU ON GU.FK_COMPANY = C.ID
                         INNER JOIN T_FECHAMENTOS F ON F.ID = P.FK_FECHAMENTO
                         LEFT JOIN T_PROPOSTA_STATUS_FINANCEIRO SF ON (P.FK_STATUS_FINANCEIRO = SF.ID)
-
                         WHERE 
-                        P.FK_STATUS_PROPOSTA IN (100,101,103,104)
-                        AND GU.FK_USUARIO = {id}
+                        A.FK_USUARIO = {id}
+                        AND P.FK_STATUS_PROPOSTA IN (100,101,103,104)
                         AND A.ID NOT IN (12166)
-
                         ORDER BY
-                            P.DATA_INICIO ASC
+                        P.DATA_INICIO ASC
                         """)
     
     return df

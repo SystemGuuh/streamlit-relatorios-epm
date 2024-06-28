@@ -51,7 +51,6 @@ if st.session_state['loggedIn']:
                 if search_user.shape[0] > 1:
                     modalChooseResultComponent(search_user)
                 else:
-                    st.write(search_user)
                     st.session_state['Search']['ID'] = search_user['ID'].loc[0]
                     st.session_state['Search']['FULL_NAME'] = str(search_user['FULL_NAME'].loc[0])
                     st.session_state['Search']['NOME'] = str(search_user['NOME'].loc[0])

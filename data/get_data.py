@@ -2,6 +2,8 @@ from data.functions import *
 from data.queries import *
 import pandas as pd
 
+#user_id -> id do usário que fez login
+#id -> id do usuário buscado
     
 def get_geral_information_and_finances(id):
     return GET_PROPOSTAS_BY_ID(id)

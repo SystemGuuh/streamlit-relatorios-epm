@@ -26,10 +26,9 @@ if 'loggedIn' not in st.session_state:
     st.switch_page("main.py")
 
 if st.session_state['loggedIn']:
-    #user_id = st.session_state['user_data']["data"]["user_id"]
-    #user_name = st.session_state['user_data']["data"]['full_name']
-    user_id = 25666
-    user_name = "Nome Usuário"
+    user_id = st.session_state['user_data']["data"]["user_id"]
+    user_name = st.session_state['user_data']["data"]['full_name']
+    
 
     if 'Search' not in st.session_state:
         st.session_state['Search'] = {'ID': None,

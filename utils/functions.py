@@ -102,3 +102,19 @@ def function_apply_filter_date_establishment(dataframe, date=None, establishment
     
 
     return df
+
+# Função para combinar dois dataframes
+def concat_column_in_two_dataframes(df1, df2, column):
+    if not df1.empty and not df2.empty:
+        df_combined = pd.concat([df1[column], df2[column]], ignore_index=True)
+        df_combined = pd.DataFrame(df_combined, columns=[column])
+    else:
+        # Caso algum dos DataFrames seja vazio
+        if df1.empty and not df2.empty:
+            df_combined = pd.DataFrame(df2[column], columns=[column])
+        elif not df1.empty and df2.empty:
+            df_combined = pd.DataFrame(df1[column], columns=[column])
+        else:
+            df_combined = pd.DataFrame(columns=[column])  # Ambos os DataFrames estão vazios
+    
+    return df_combined

@@ -38,5 +38,4 @@ Boletos do artista(pagamentos do contratante)
  -- Shoe dentro do boleto
 
 Próximos passos:
-- adicionar filtro de data e estabelecimento em histórico
 - página de financeiro

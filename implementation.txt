@@ -38,4 +38,6 @@ Boletos do artista(pagamentos do contratante)
  -- Shoe dentro do boleto
 
 Próximos passos:
+- arrumar aba de resumo
+- ver como trocar vírgula por ponto
 - página de financeiro

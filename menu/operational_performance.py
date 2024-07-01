@@ -29,16 +29,28 @@ def buildOperationalPerformace(exploreStages, oportunites, casting, favorite, op
         financeDash = financeDash[financeDash['ARTISTA']==art]
         allOperationalPerformaceByOccurrenceAndDate = allOperationalPerformaceByOccurrenceAndDate[allOperationalPerformaceByOccurrenceAndDate['ARTISTA']==art]
 
+        row1 = st.columns(4)
+        financeDash = transform_show_statement(financeDash)
+
+        tile = row1[0].container(border=True)
+        tile.markdown(f"<p style='text-align: center;'>Número de shows</br>{financeDash['NÚMERO DE SHOWS'].loc[0]}</p>", unsafe_allow_html=True)
+
+        tile = row1[1].container(border=True)
+        tile.markdown(f"<p style='text-align: center;'>Porcentagem de Checkin(%)</br>{financeDash['PORCENTAGEM DE CHECKIN(%)'].loc[0]}</p>", unsafe_allow_html=True)
+
+        tile = row1[2].container(border=True)
+        tile.markdown(f"<p style='text-align: center;'>Porcentagem de Checkout(%)</br>{financeDash['PORCENTAGEM DE CHECKOUT(%)'].loc[0]}</p>", unsafe_allow_html=True)
+
+        tile = row1[3].container(border=True)
+        tile.markdown(f"<p style='text-align: center;'>Total de Ocorrências</br>{sum(ByOccurrence['QUANTIDADE'])}</p>", unsafe_allow_html=True)
+
         container1 = st.container(border=True)
         with container1: 
             row1 = st.columns(2)
             with row1[0]:
                 plotPizzaChart(ByOccurrence['TIPO'], ByOccurrence['QUANTIDADE'], "Tipos de Ocorrências")
-                plotBarChart(ByWeek, 'SEMANA', 'QUANTIDADE', "Quantidade de ocorrêcias")
             with row1[1]:
-                st.markdown(f"<h5 style='text-align: center; background-color: #ffb131; padding: 0.1em;'>Quantidade de ocorrências</h5>", unsafe_allow_html=True)
-                st.dataframe(operationalPerformace[['ARTISTA', 'ESTILO','QUANTIDADE']].reset_index(drop=True), hide_index=True,use_container_width=True) 
-                plotDataframe(transform_show_statement(financeDash), "Quantidade de checkin e checkout")
+                plotBarChart(ByWeek, 'SEMANA', 'QUANTIDADE', "Quantidade de ocorrêcias por dia")
     
     with tab[3]:
         # removendo valores e reodernando o dataset

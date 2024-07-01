@@ -36,6 +36,7 @@ def plotPizzaChart(labels, sizes, name):
     chart_key = f"{labels}_{sizes}_{name}_"
     st.markdown(f"<h5 style='text-align: center; background-color: #ffb131; padding: 0.1em;'>{name}</h5>", unsafe_allow_html=True)
     
+
     # Preparar os dados para o gráfico
     data = [{"value": size, "name": label} for size, label in zip(sizes, labels)]
     

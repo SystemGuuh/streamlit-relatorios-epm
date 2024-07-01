@@ -41,7 +41,7 @@ def function_search_user(search):
 # conta o checkin e checkout para a tela de Desempenho Operacional
 def transform_show_statement(df):
     # Filtrar apenas as linhas que têm "Checkout Realizado" ou "Checkin Realizado" na coluna "STATUS_PROPOSTA"
-    df_filtered = df
+    df_filtered = df.copy()
     
     # Inicializar colunas para armazenar a contagem
     df_filtered['CHECKIN_REALIZADO'] = 0
@@ -118,3 +118,4 @@ def concat_column_in_two_dataframes(df1, df2, column):
             df_combined = pd.DataFrame(columns=[column])  # Ambos os DataFrames estão vazios
     
     return df_combined
+

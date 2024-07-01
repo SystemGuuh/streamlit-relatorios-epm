@@ -40,4 +40,4 @@ Boletos do artista(pagamentos do contratante)
  -- Shoe dentro do boleto
 
 Próximos passos:
-- Formatar tabelas das outras abas de OPERACIONAL
+- arrumar página de resumo de ocorrências

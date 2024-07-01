@@ -219,3 +219,20 @@ def buttonDowloadDash(df, name):
     mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
     key=button_key
     )
+
+def filterCalendarComponent():
+    today = datetime.date.today()
+
+    first_day_of_month = today.replace(day=1)
+    last_day_of_month = today.replace(day=calendar.monthrange(today.year, today.month)[1])
+
+    d = st.date_input("Filtro de data:", (first_day_of_month, last_day_of_month),
+                      format="DD/MM/YYYY")
+    return d
+
+def filterEstablishmentComponent(df):
+    df_sorted = df.sort_values(by='ESTABELECIMENTO')
+    option = st.selectbox("Estabelecimentos:",(df_sorted['ESTABELECIMENTO'].unique()),
+            index=None, placeholder="Escolha um")
+    return option
+

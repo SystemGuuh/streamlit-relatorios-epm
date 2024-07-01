@@ -79,4 +79,26 @@ def to_excel(df):
     processed_data = output.getvalue()
     return processed_data
 
+# Função para aplicar filtro da data e estabelecimento
+def function_apply_filter_date_establishment(dataframe, date=None, establishment=None):
+    df = dataframe.copy()
+    if date is not None:
+        if len(date) > 1 and date[0] is not None and date[1] is not None:
+            startDate = pd.Timestamp(date[0])
+            endDate = pd.Timestamp(date[1] + pd.Timedelta(days=1)) 
+            try:
+                df['DATA DE INÍCIO'] = pd.to_datetime(df['DATA DE INÍCIO'], dayfirst=True)
+                df = df.dropna(subset=['DATA DE INÍCIO'])
+                df = df[(df['DATA DE INÍCIO'] >= startDate) & (df['DATA DE INÍCIO'] <= endDate)]
+            except Exception as e:
+                st.error(f'Erro: {e}')
+                
+    if establishment is not None:
+        try:
+            df = df[df['ESTABELECIMENTO'] == establishment]
+        except:
+            pass
+            
+    
 
+    return df

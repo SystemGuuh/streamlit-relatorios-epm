@@ -6,7 +6,7 @@ import streamlit as st
 def search_artist_id(filter):
     result = getDfFromQuery("""
     SELECT 
-    AU.ID,
+    TA.ID,
     AU.LOGIN,
     AU.FULL_NAME,
     TA.CELULAR,
@@ -113,7 +113,7 @@ def showhistory_old_show_history(id):
         AND P.DATA_INICIO IS NOT NULL
         AND DATE(P.DATA_INICIO) <= CURDATE()
         AND P.DATA_INICIO > DATE_SUB(CURDATE(), INTERVAL 120 DAY)
-        AND AU.ID = {id}
+        AND A.ID = {id}
 
     ORDER BY P.DATA_INICIO DESC;
     """)
@@ -195,7 +195,7 @@ def showhistory_new_show_history(id):
         AND A.NOME IS NOT NULL 
         AND P.DATA_INICIO IS NOT NULL
         AND DATE(P.DATA_INICIO) >= CURDATE()
-        AND A.FK_USUARIO = {id}
+        AND A.ID = {id}
         
 
     ORDER BY P.DATA_INICIO DESC 
@@ -232,11 +232,10 @@ def operational_explore_stages(id):
     LEFT JOIN ADMIN_USERS AU ON AU.ID = A.FK_USUARIO
 
     WHERE 
-    # C.ID NOT IN (102,632,633,343)
-    # AND 
-    C.ACTIVE = 1
+    C.ID NOT IN (102,632,633,343)
+    AND C.ACTIVE = 1
     AND C.EXPLORAR_CONTRATANTES = 1
-    AND A.FK_USUARIO = {id}
+    AND A.ID = {id}
 
     GROUP BY CI.ID 
     """)
@@ -291,7 +290,7 @@ def operational_oportunities(id):
 
     WHERE  
     O.FK_OCASIAO <> 106
-    AND A.FK_USUARIO = {id}
+    AND A.ID = {id}
 
     GROUP BY C.ID
     ORDER BY O.DATA_INICIO DESC
@@ -310,7 +309,7 @@ def operational_casting(id):
     INNER JOIN ADMIN_USERS AU ON AU.ID = A.FK_USUARIO
     INNER JOIN T_COMPANIES C ON C.ID = CAST.FK_CONTRATANTE
 
-    WHERE A.FK_USUARIO = {id}
+    WHERE A.ID = {id}
 
     """)
     return result
@@ -330,7 +329,7 @@ def operational_favorite(id):
 
     WHERE 
     F.FAVORITE = 1
-    AND A.FK_USUARIO = {id}
+    AND A.ID = {id}
 
     """)
     return result
@@ -360,7 +359,7 @@ def operational_performance(id):
                             LEFT JOIN T_ESTILOS_MUSICAIS EM ON A.FK_ESTILO_PRINCIPAL = EM.ID
                             
                             WHERE
-                            A.FK_USUARIO = {id} 
+                            A.ID = {id} 
                             AND C.ID NOT IN (102,343,632,633)
                             AND A.ID NOT IN (12166)
                             AND OA.DATA_OCORRENCIA >= DATE_SUB(CURDATE(), INTERVAL 6 MONTH)
@@ -392,7 +391,7 @@ def operational_report_by_occurence_and_date(id):
                             LEFT JOIN T_COMPANIES C ON (C.ID = P.FK_CONTRANTE OR C.ID = F.FK_CONTRATANTE OR C.ID = P2.FK_CONTRANTE)
                             LEFT JOIN T_ESTILOS_MUSICAIS EM ON A.FK_ESTILO_PRINCIPAL = EM.ID
 
-                            WHERE A.FK_USUARIO = {id} 
+                            WHERE A.ID = {id} 
                             AND C.ID NOT IN (102,343,632,633)
                             AND A.ID NOT IN (12166)
                             AND OA.DATA_OCORRENCIA >= DATE_SUB(CURDATE(), INTERVAL 6 MONTH)
@@ -429,7 +428,7 @@ def operational_general_information_and_finance(id):
                         INNER JOIN T_FECHAMENTOS F ON F.ID = P.FK_FECHAMENTO
                         LEFT JOIN T_PROPOSTA_STATUS_FINANCEIRO SF ON (P.FK_STATUS_FINANCEIRO = SF.ID)
                         WHERE 
-                        A.FK_USUARIO = {id}
+                        A.ID = {id}
                         AND P.FK_STATUS_PROPOSTA IN (100,101,103,104)
                         AND A.ID NOT IN (12166)
                         ORDER BY

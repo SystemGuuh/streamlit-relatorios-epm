@@ -14,8 +14,6 @@ card no header com informações do usuário
 distribuição em menus:
 
 [Operacional]
- Histórico de shows
- -- futuro passado
  Explorar palcos
  Oportunidades
  Artístico

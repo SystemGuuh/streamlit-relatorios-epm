@@ -36,7 +36,7 @@ def buildOperationalPerformace(exploreStages, oportunites, casting, favorite, op
                 plotPizzaChart(ByOccurrence['TIPO'], ByOccurrence['QUANTIDADE'], "Tipos de Ocorrências")
                 plotBarChart(ByWeek, 'SEMANA', 'QUANTIDADE', "Quantidade de ocorrêcias")
             with row1[1]:
-                st.markdown(f"<h5 style='text-align: center; background-color: #ffb131; padding: 0.1em;'>Ranking de artistas com mais ocorrências</h5>", unsafe_allow_html=True)
+                st.markdown(f"<h5 style='text-align: center; background-color: #ffb131; padding: 0.1em;'>Quantidade de ocorrências</h5>", unsafe_allow_html=True)
                 st.dataframe(operationalPerformace[['ARTISTA', 'ESTILO','QUANTIDADE']].reset_index(drop=True), hide_index=True,use_container_width=True) 
                 plotDataframe(transform_show_statement(financeDash), "Quantidade de checkin e checkout")
     

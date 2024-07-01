@@ -26,8 +26,8 @@ def function_fix_tab_echarts():
 # função para procurar usuários:
 def function_search_user(search):
     if any(value for value in search.values() if value):
-        if search['ArtistId']: return search_artist_id("WHERE AU.ID = '" + str(search['ArtistId']) + "'")
-        if search['ArtistName']: return search_artist_id("WHERE AU.FULL_NAME = '" + str(search['ArtistName']) + "'")
+        if search['ArtistId']: return search_artist_id("WHERE TA.ID = '" + str(search['ArtistId']) + "'")
+        if search['ArtistName']: return search_artist_id("WHERE TA.NOME = '" + str(search['ArtistName']) + "'")
         if search['ArtistEmail']: return search_artist_id("WHERE AU.LOGIN = '" + str(search['ArtistEmail']) + "'")
         if search['ArtistPhone']: return search_artist_id("WHERE TA.CELULAR = '" + str(search['ArtistPhone']) + "'")
         if search['EstablishmentId']: return search_establishment_id()

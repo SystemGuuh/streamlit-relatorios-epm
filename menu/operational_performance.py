@@ -6,29 +6,23 @@ from decimal import Decimal
 
 from menu.page import Page
 
-def buildOperationalPerformace(oldShowHistory, newShowHistory, exploreStages, oportunites, casting, favorite, operationalPerformace, ByOccurrence, ByWeek, allOperationalPerformaceByOccurrenceAndDate, financeDash):
-    tab= st.tabs(["Histórico de shows", "Explorar palcos", "Artístico", "Resumos de ocorrências", "Extrato de ocorrências"])
+def buildOperationalPerformace(exploreStages, oportunites, casting, favorite, operationalPerformace, ByOccurrence, ByWeek, allOperationalPerformaceByOccurrenceAndDate, financeDash):
+    tab= st.tabs(["Explorar palcos", "Artístico", "Resumos de ocorrências", "Extrato de ocorrências"])
     
     with tab[0]:
-        container1 = st.container(border=True)
-        with container1: 
-            plotDataframe(oldShowHistory, "Histórico de shows antigos")
-            plotDataframe(newShowHistory, "Histórico de shows futuros")
-
-    with tab[1]:
         container1 = st.container(border=True)
         with container1: 
             plotDataframe(exploreStages, "Explorar palcos do artista")
             plotDataframe(oportunites, "Oportunidades do artista")
 
-    with tab[2]:
+    with tab[1]:
         container1 = st.container(border=True)
         with container1: 
             col = st.columns([1,2])
             with col[0]: plotDataframe(casting, "Casting do artista")
             with col[1]: plotDataframe(favorite, "Casas em que o artista está favoritado")
         
-    with tab[3]:
+    with tab[2]:
         # filtrando pelo artista a partir do session_state
         art = st.session_state['Search']['NOME']
         operationalPerformace = operationalPerformace[operationalPerformace['ARTISTA']==art]
@@ -46,7 +40,7 @@ def buildOperationalPerformace(oldShowHistory, newShowHistory, exploreStages, op
                 st.dataframe(operationalPerformace[['ARTISTA', 'ESTILO','QUANTIDADE']].reset_index(drop=True), hide_index=True,use_container_width=True) 
                 plotDataframe(transform_show_statement(financeDash), "Quantidade de checkin e checkout")
     
-    with tab[4]:
+    with tab[3]:
         # removendo valores e reodernando o dataset
         allOperationalPerformaceByOccurrenceAndDate.drop(columns=['SEMANA'], inplace=True)
         allOperationalPerformaceByOccurrenceAndDate = allOperationalPerformaceByOccurrenceAndDate[['ARTISTA', 'ESTILO','ESTABELECIMENTO','DATA','TIPO']]
@@ -69,8 +63,6 @@ def buildOperationalPerformace(oldShowHistory, newShowHistory, exploreStages, op
 class OperationalPerformacePage(Page):
     def render(self):
         buildOperationalPerformace(
-                                   self.data['oldShowHistory'],
-                                   self.data['newShowHistory'],
                                    self.data['exploreStages'],
                                    self.data['oportunites'],
                                    self.data['casting'],

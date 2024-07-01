@@ -4,7 +4,7 @@ import pandas as pd
 
 #user_id -> id do usário que fez login
 #id -> id do usuário buscado
-    
+
 def get_geral_information_and_finances(id):
     return GET_PROPOSTAS_BY_ID(id)
 
@@ -58,46 +58,22 @@ def get_data_GeneralDash(data, id, inputDate=None, inputEstablishment=None):
     
     return data
 
-def get_data_Finances(data, id, inputDate=None, inputEstablishment=None):
-    weeklyFinances = apply_filter_in_dataframe( GET_WEEKLY_FINANCES(id), inputDate, inputEstablishment)
-    
-    data['weeklyFinances'] = weeklyFinances
-
-    return data
-
-def get_data_Review(data, id, inputDate=None, inputEstablishment=None):
-    artistRanking = apply_filter_in_dataframe(GET_ARTIST_RANKING(id), inputDate, inputEstablishment)
-    reviewArtistByHouse = apply_filter_in_dataframe(GET_REVIEW_ARTIST_BY_HOUSE(id), inputDate, inputEstablishment)
-    averageReviewArtistByHouse = apply_filter_in_dataframe(GET_AVAREGE_REVIEW_ARTIST_BY_HOUSE(id), inputDate, inputEstablishment)
-    reviewHouseByArtist = apply_filter_in_dataframe(GET_REVIEW_HOUSE_BY_ARTIST(id), inputDate, inputEstablishment)
-    
-    data['artistRanking'] = artistRanking
-    data['reviewArtistByHouse'] = reviewArtistByHouse
-    data['averageReviewArtistByHouse'] = averageReviewArtistByHouse
-    data['reviewHouseByArtist'] = reviewHouseByArtist
-    
-    return data
-
-def get_data_ShowStatement(data, id, inputDate=None, inputEstablishment=None):
-    downloadShowStatement = GET_PROPOSTAS_BY_ID(id)
-    
-    data['downloadShowStatement'] = downloadShowStatement
-    
-    return data
-
-def get_data_operational_performace(data, user_id,id):
+def get_data_ShowHistory(data, user_id,id):
     try:
-        oldShowHistory = operational_old_show_history(id)
+        oldShowHistory = showhistory_old_show_history(id)
         data['oldShowHistory'] = oldShowHistory
     except Exception as e:
         data['oldShowHistory'] = pd.DataFrame()
 
     try:
-        newShowHistory = operational_new_show_history(id)
+        newShowHistory = showhistory_new_show_history(id)
         data['newShowHistory'] = newShowHistory
     except Exception as e:
         data['newShowHistory'] = pd.DataFrame()
 
+    return data
+
+def get_data_operational_performace(data, user_id,id):
     try:
         exploreStages = operational_explore_stages(id)
         data['exploreStages'] = exploreStages

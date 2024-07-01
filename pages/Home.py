@@ -8,7 +8,7 @@ from data.get_data import *
 
 # modularização das páginas
 from menu.general_dash import GeneralDashPage
-from menu.finances import FinancesPage
+from menu.show_history import ShowHistory
 from menu.reviews import ReviewPage
 from menu.operational_performance import OperationalPerformacePage
 from menu.show_statement import ShowStatementPage
@@ -28,7 +28,8 @@ if 'loggedIn' not in st.session_state:
 if st.session_state['loggedIn']:
     user_id = st.session_state['user_data']["data"]["user_id"]
     user_name = st.session_state['user_data']["data"]['full_name']
-    
+    #user_id = 25666
+    #user_name = "Nome Usuário"
 
     if 'Search' not in st.session_state:
         st.session_state['Search'] = {'ID': None,
@@ -76,22 +77,22 @@ if st.session_state['loggedIn']:
     data = initialize_data(user_id)
     # Body
     tab1, tab2, tab3 = st.tabs(["OPERACIONAL", "HISTÓRICO DE SHOWS", "FINANCEIRO"])
+    search_user_id = st.session_state['Search']['ID']
     with tab1:
-        #try:
+        try:
             if st.session_state['Search']['ID'] is not None:
-                search_user_id = st.session_state['Search']['ID']
                 data = get_data_operational_performace(data, user_id, search_user_id)
                 page = OperationalPerformacePage(data)
                 page.render()
-        #except Exception as e:
-        #    st.error(f'Não foi possível carregar a página. Erro: {e}')
-    with tab2:
-        try:
-            data = get_data_Finances(data, user_id, inputDate, inputEstablishment)
-            page = FinancesPage(data)
-            page.render()
         except Exception as e:
             st.error(f'Não foi possível carregar a página. Erro: {e}')
+    with tab2:
+        #try:
+            data = get_data_ShowHistory(data, user_id, search_user_id)
+            page = ShowHistory(data)
+            page.render()
+        #except Exception as e:
+        #    st.error(f'Não foi possível carregar a página. Erro: {e}')
     with tab3:
         try:
             data = get_data_Review(data, user_id, inputDate, inputEstablishment)

@@ -36,7 +36,7 @@ def search_establishment_id(filter):
     return result.loc[0, 'ID']
 
 @st.cache_data
-def operational_old_show_history(id):
+def showhistory_old_show_history(id):
     query = (f"""
     SELECT
     P.ID AS 'ID DA PROPOSTA',
@@ -121,7 +121,7 @@ def operational_old_show_history(id):
     return getDfFromQuery(query)
 
 @st.cache_data     
-def operational_new_show_history(id):
+def showhistory_new_show_history(id):
     return getDfFromQuery(f"""
     SELECT
     P.ID AS 'ID DA PROPOSTA',
